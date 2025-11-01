@@ -1,0 +1,27 @@
+{
+  "name": "@kotekli/shared-types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for Kotekli app (Admin & Mobile)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "typescript",
+    "types",
+    "supabase"
+  ],
+  "author": "Kotekli",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}
