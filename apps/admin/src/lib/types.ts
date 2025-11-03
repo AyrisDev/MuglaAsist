@@ -19,9 +19,9 @@ export type HoursJSON = {
 export interface Category {
   id: number;
   name: string;
-  icon: string;
+  icon_name: string;
   slug: string;
-  display_order: number;
+  order_index: number;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -73,12 +73,16 @@ export interface Deal {
   id: number;
   venue_id: number;
   title: string;
+  title_en: string | null;
   description: string;
-  discount_text: string | null;
+  description_en: string | null;
+  discount_percentage: number | null;
+  terms: string | null;
   image_url: string | null;
-  start_date: string;
-  end_date: string;
+  valid_from: string;
+  valid_until: string;
   is_active: boolean;
+  view_count: number;
   created_at: string;
   updated_at: string;
 }

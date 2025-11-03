@@ -1,169 +1,50 @@
-# Kötekli Mobile App
+# Welcome to your Expo app 👋
 
-React Native (Expo) öğrenci süper app mobil uygulaması.
+This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
-## Teknolojiler
+## Get started
 
-- Expo (Managed Workflow)
-- React Native
-- TypeScript
-- React Navigation (Bottom Tabs + Stack)
-- Supabase
-- TanStack Query
-- Expo SecureStore
+1. Install dependencies
 
-## Kurulum
+   ```bash
+   npm install
+   ```
 
-1. Gerekli paketleri yükleyin:
+2. Start the app
 
-```bash
-npm install
-```
+   ```bash
+   npx expo start
+   ```
 
-2. `.env` dosyası oluşturun:
+In the output, you'll find options to open the app in a
 
-```bash
-cp .env.example .env
-```
+- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
+- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
+- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
+- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-3. Supabase bilgilerinizi ekleyin:
+You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-```env
-EXPO_PUBLIC_SUPABASE_URL=https://xxxxx.supabase.co
-EXPO_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
+## Get a fresh project
 
-## Geliştirme
-
-### Expo Go ile test:
+When you're ready, run:
 
 ```bash
-npm start
+npm run reset-project
 ```
 
-Sonra telefonunuzda Expo Go app'i açın ve QR kodu tarayın.
+This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-### Platform-specific:
+## Learn more
 
-```bash
-npm run android  # Android emülatör/cihaz
-npm run ios      # iOS simulator (macOS gerekli)
-npm run web      # Web browser
-```
+To learn more about developing your project with Expo, look at the following resources:
 
-## Dosya Yapısı
+- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-```
-apps/mobile/
-├── App.tsx                    # Entry point
-├── src/
-│   ├── navigation/
-│   │   ├── RootNavigator.tsx         # Bottom Tabs
-│   │   └── FoodStackNavigator.tsx    # Food Stack
-│   ├── screens/
-│   │   ├── FoodHomeScreen.tsx        # Yeme-İçme ana sayfa
-│   │   ├── TransportScreen.tsx       # Ulaşım sayfası
-│   │   └── CampusScreen.tsx          # Kampüs sayfası
-│   ├── lib/
-│   │   ├── supabase.ts               # Supabase client
-│   │   └── queryClient.ts            # TanStack Query client
-│   ├── types/
-│   │   ├── database.ts               # Database types
-│   │   └── navigation.ts             # Navigation types
-│   ├── components/                   # Shared components
-│   └── hooks/                        # Custom hooks
-├── app.json                   # Expo config
-├── package.json
-└── tsconfig.json
-```
+## Join the community
 
-## Ekranlar
+Join our community of developers creating universal apps.
 
-### 3 Ana Tab:
-
-1. **Yeme-İçme** (Food)
-   - Kategoriler
-   - Mekanlar
-   - Menü görüntüleme
-   - Açık/kapalı durumu
-
-2. **Ulaşım** (Transport)
-   - Ring otobüs saatleri
-   - Merkez otobüs saatleri
-
-3. **Kampüs** (Campus)
-   - Yemekhane menüsü
-   - Kampüs etkinlikleri (Faz 3)
-
-## Özellikler
-
-- [x] Bottom Tab Navigation
-- [x] Stack Navigation (Food)
-- [x] Supabase client setup
-- [x] TanStack Query setup
-- [x] TypeScript types
-- [ ] Kategoriler listesi
-- [ ] Mekanlar listesi
-- [ ] Mekan detay sayfası
-- [ ] Ring/Merkez otobüs saatleri
-- [ ] Yemekhane menüsü
-
-## Environment Variables
-
-Expo'da environment variables `EXPO_PUBLIC_` prefix'i ile başlamalı:
-
-```env
-EXPO_PUBLIC_SUPABASE_URL=your_url
-EXPO_PUBLIC_SUPABASE_ANON_KEY=your_key
-```
-
-## Build & Deploy
-
-### Development Build:
-
-```bash
-eas build --profile development --platform android
-```
-
-### Production Build:
-
-```bash
-eas build --profile production --platform all
-```
-
-### Submit to Stores:
-
-```bash
-eas submit --platform ios
-eas submit --platform android
-```
-
-## Tips
-
-- Expo Go sınırlamaları için: Custom native code gerekliyse Development Build kullanın
-- Hot reload: Dosyaları kaydettiğinizde otomatik güncellenir
-- Debug: Shake device → "Debug Remote JS"
-- Clear cache: `expo start -c`
-
-## Supabase RLS
-
-Mobile app için RLS politikası:
-
-```sql
--- Public read (herkes aktif kayıtları görebilir)
-CREATE POLICY "Public read access"
-ON public.venues
-FOR SELECT
-USING (is_active = true);
-```
-
-## Sonraki Adımlar
-
-1. Custom hooks oluştur (useCategories, useVenues, etc.)
-2. Category listesi component
-3. Venue listesi component
-4. Venue detay sayfası
-5. Markdown renderer (services_data için)
-6. Image caching (expo-image)
-7. Pull-to-refresh
-8. Skeleton loaders
+- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
