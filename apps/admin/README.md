@@ -1,4 +1,4 @@
-# Kötekli Admin Panel
+# Muğla Asistanı Admin Panel
 
 Next.js 14 tabanlı admin yönetim paneli.
 
@@ -80,7 +80,7 @@ Supabase SQL Editor'da:
 -- Admin kullanıcı oluştur
 INSERT INTO auth.users (email, encrypted_password, email_confirmed_at, raw_app_meta_data)
 VALUES (
-  'admin@kotekli.edu.tr',
+  'admin@mu.edu.tr',
   crypt('your_password', gen_salt('bf')),
   now(),
   '{"role": "admin"}'::jsonb

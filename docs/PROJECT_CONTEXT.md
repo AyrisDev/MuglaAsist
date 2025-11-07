@@ -1,8 +1,8 @@
-# Kötekli Asistanı - Proje Context (Claude CLI İçin)
+# Muğla Asistanı - Proje Context (Claude CLI İçin)
 
 ## Proje Özeti
 
-Öğrenci süper app'i. Bodrum Kötekli kampüsündeki öğrenciler için yemek, ulaşım, kampüs hizmetleri tek uygulamada.
+Muğla Asistanı, Muğla Sıtkı Koçman Üniversitesi Öğrencileri için geliştirilmiş bir öğrenci süper uygulamasıdır. Yemek, ulaşım ve kampüs hizmetlerini tek bir uygulamada toplar.
 
 ## Teknoloji Stack
 
