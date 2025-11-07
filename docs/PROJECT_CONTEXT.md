@@ -1,8 +1,4 @@
-# Muğla Asist - Proje Context (Claude CLI İçin)
 
-## Proje Özeti
-
-Öğrenci süper app'i. Muğla öğrencileri için yemek, ulaşım, kampüs hizmetleri tek uygulamada.
 
 ## Teknoloji Stack
 

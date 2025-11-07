@@ -1,4 +1,4 @@
-# Muğla Asist Admin Panel
+
 
 Next.js 14 tabanlı admin yönetim paneli.
 
@@ -76,16 +76,7 @@ apps/admin/
 
 Supabase SQL Editor'da:
 
-```sql
--- Admin kullanıcı oluştur
-INSERT INTO auth.users (email, encrypted_password, email_confirmed_at, raw_app_meta_data)
-VALUES (
-  'admin@mugla.edu.tr',
-  crypt('your_password', gen_salt('bf')),
-  now(),
-  '{"role": "admin"}'::jsonb
-);
-```
+
 
 ## RLS Politikaları
 
