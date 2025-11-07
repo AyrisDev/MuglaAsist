@@ -126,8 +126,8 @@ export interface Deal {
   description: string;
   discount_text: string | null; // e.g., "20% OFF"
   image_url: URL | null;
-  start_date: Timestamp;
-  end_date: Timestamp;
+  valid_from: Timestamp;
+  valid_until: Timestamp;
   is_active: ActiveStatus;
   created_at: Timestamp;
   updated_at: Timestamp;

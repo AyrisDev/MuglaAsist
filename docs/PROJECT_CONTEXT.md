@@ -1,8 +1,4 @@
-# Muğla Asistanı - Proje Context (Claude CLI İçin)
 
-## Proje Özeti
-
-Muğla Asistanı, Muğla Sıtkı Koçman Üniversitesi Öğrencileri için geliştirilmiş bir öğrenci süper uygulamasıdır. Yemek, ulaşım ve kampüs hizmetlerini tek bir uygulamada toplar.
 
 ## Teknoloji Stack
 

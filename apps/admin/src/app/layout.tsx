@@ -5,7 +5,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Kötekli Admin Panel",
+  title: "Muğla Asist Admin Panel",
   description: "Öğrenci süper app yönetim paneli",
 };
 

@@ -118,7 +118,7 @@ export default function DashboardPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-600 mt-2">
-            Kötekli Öğrenci Süper App yönetim paneline hoş geldiniz
+            Muğla Asist yönetim paneline hoş geldiniz
           </p>
         </div>
 
