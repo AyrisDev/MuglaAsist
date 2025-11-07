@@ -1,0 +1,28 @@
+{
+  "name": "database",
+  "version": "1.0.0",
+  "description": "Prisma database management for Muğla Asist",
+  "main": "index.js",
+  "scripts": {
+    "db:studio": "prisma studio",
+    "db:push": "prisma db push",
+    "db:pull": "prisma db pull",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "node prisma/seed.js"
+  },
+  "keywords": [
+    "prisma",
+    "database",
+    "supabase"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.18.0",
+    "prisma": "^6.18.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3"
+  }
+}

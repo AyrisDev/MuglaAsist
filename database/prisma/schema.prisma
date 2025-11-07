@@ -1,0 +1,161 @@
+// Muğla Asist - Database Schema
+// Supabase PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Kategoriler (Kahveciler, Fast Food, etc.)
+model categories {
+  id         Int      @id @default(autoincrement())
+  name       String
+  icon       String?
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  venues     venues[]
+
+  @@map("categories")
+}
+
+// Mekanlar
+model venues {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  category_id Int
+  description String?
+  logo_url    String?
+  cover_url   String?
+  phone       String?
+  location    String?
+  rating      Float?
+  distance    String?
+  hours       Json?     // JSONB: {monday: {open, close, is_next_day}}
+  is_featured Boolean   @default(false)
+  is_active   Boolean   @default(true)
+  created_at  DateTime  @default(now())
+
+  categories  categories   @relation(fields: [category_id], references: [id])
+  menu_items  menu_items[]
+
+  @@map("venues")
+}
+
+// Menü Ürünleri
+model menu_items {
+  id           Int      @id @default(autoincrement())
+  venue_id     Int
+  name         String
+  description  String?
+  price        Float
+  category     String?
+  is_available Boolean  @default(true)
+  is_approved  Boolean  @default(false)
+  created_at   DateTime @default(now())
+
+  venues       venues   @relation(fields: [venue_id], references: [id], onDelete: Cascade)
+
+  @@map("menu_items")
+}
+
+// Hizmet Verileri (Ring otobüs, yemekhane menüsü, etc.)
+model services_data {
+  id         Int      @id @default(autoincrement())
+  data_key   String   @unique // "bus_ring", "bus_center", "cafeteria_menu"
+  data_value Json     // Markdown veya JSON data
+  updated_at DateTime @updatedAt
+  created_at DateTime @default(now())
+
+  @@map("services_data")
+}
+
+// Fırsatlar (Faz 3)
+model deals {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  venue_id    Int?
+  image_url   String?
+  valid_from  DateTime
+  valid_until    DateTime
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+
+  @@map("deals")
+}
+
+// Etkinlikler (Faz 3)
+model events {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  image_url   String?
+  event_date  DateTime
+  location    String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+
+  @@map("events")
+}
+
+// Eczaneler
+model pharmacies {
+  id         Int      @id @default(autoincrement())
+  name       String
+  address    String?
+  phone      String?
+  latitude   Decimal? @db.Decimal(10, 8)
+  longitude  Decimal? @db.Decimal(11, 8)
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+
+  on_duty_pharmacy on_duty_pharmacy[]
+
+  @@map("pharmacies")
+}
+
+// Nöbetçi eczane (günlük)
+model on_duty_pharmacy {
+  id          Int        @id @default(autoincrement())
+  pharmacy_id Int
+  duty_date   DateTime   @unique @db.Date
+  created_at  DateTime   @default(now())
+
+  pharmacy    pharmacies @relation(fields: [pharmacy_id], references: [id], onDelete: Cascade)
+
+  @@map("on_duty_pharmacy")
+}
+
+// Otobüs hatları
+model bus_routes {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+
+  bus_schedules bus_schedules[]
+
+  @@map("bus_routes")
+}
+
+// Otobüs saatleri
+model bus_schedules {
+  id              Int        @id @default(autoincrement())
+  route_id        Int
+  day_of_week     String     // 'monday', 'tuesday', etc.
+  departure_times Json       // ["08:00", "09:30"]
+  created_at      DateTime   @default(now())
+
+  bus_route       bus_routes @relation(fields: [route_id], references: [id], onDelete: Cascade)
+
+  @@unique([route_id, day_of_week])
+  @@map("bus_schedules")
+}
