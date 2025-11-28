@@ -113,7 +113,7 @@ const menuSections = useMemo(() => {
 
   const isOpen = isVenueOpen(venue.hours);
   const allDays = getAllDaysFormatted(venue.hours);
-
+console.log(venue.hours)
   return (
     <ScrollView style={styles.container}>
       {/* Cover Image */}

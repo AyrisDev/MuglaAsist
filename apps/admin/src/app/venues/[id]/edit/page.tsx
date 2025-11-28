@@ -53,20 +53,29 @@ export default function EditVenuePage() {
     is_featured: boolean;
     is_active: boolean;
   }) => {
+    // Only update slug if name changed
+    const updates: any = {
+      name: data.name,
+      category_id: data.category_id,
+      description: data.description,
+      logo_url: data.logo_url,
+      cover_url: data.cover_url,
+      phone: data.phone,
+      location: data.location,
+      hours: data.hours,
+      is_featured: data.is_featured,
+      is_active: data.is_active,
+    };
+
+    // If name changed, regenerate slug
+    if (venue && venue.name !== data.name) {
+      const { generateSlug } = await import("@/lib/utils");
+      updates.slug = generateSlug(data.name);
+    }
+
     const { error: updateError } = await supabase
       .from("venues")
-      .update({
-        name: data.name,
-        category_id: data.category_id,
-        description: data.description,
-        logo_url: data.logo_url,
-        cover_url: data.cover_url,
-        phone: data.phone,
-        location: data.location,
-        hours: data.hours,
-        is_featured: data.is_featured,
-        is_active: data.is_active,
-      })
+      .update(updates)
       .eq("id", id);
 
     if (updateError) throw updateError;

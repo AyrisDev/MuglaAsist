@@ -3,6 +3,7 @@
 import { supabase } from "@/lib/supabase";
 import { Sidebar } from "@/components/Sidebar";
 import { VenueForm } from "@/components/venues/VenueForm";
+import { generateSlug } from "@/lib/utils";
 
 export default function NewVenuePage() {
   const handleSubmit = async (data: {
@@ -17,8 +18,11 @@ export default function NewVenuePage() {
     is_featured: boolean;
     is_active: boolean;
   }) => {
+    const slug = generateSlug(data.name);
+
     const { error } = await supabase.from("venues").insert({
       name: data.name,
+      slug: slug,
       category_id: data.category_id,
       description: data.description,
       logo_url: data.logo_url,

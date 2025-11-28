@@ -155,7 +155,7 @@ export default function VenuesPage() {
             <option value="">Tüm Kategoriler</option>
             {categories.map((category) => (
               <option key={category.id} value={category.id}>
-                {category.icon_name} {category.name}
+                 {category.name}
               </option>
             ))}
           </select>
@@ -276,7 +276,7 @@ export default function VenuesPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="text-sm text-gray-600">
-                        {venue.categories?.icon_name} {venue.categories?.name}
+                        {venue.categories?.name}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">

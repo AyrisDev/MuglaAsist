@@ -47,14 +47,23 @@ export default function EditCategoryPage() {
     order_index: number;
     is_active: boolean;
   }) => {
+    // Only update slug if name changed
+    const updates: any = {
+      name: data.name,
+      icon_name: data.icon_name,
+      order_index: data.order_index,
+      is_active: data.is_active,
+    };
+
+    // If name changed, regenerate slug
+    if (category && category.name !== data.name) {
+      const { generateSlug } = await import("@/lib/utils");
+      updates.slug = generateSlug(data.name);
+    }
+
     const { error: updateError } = await supabase
       .from("categories")
-      .update({
-        name: data.name,
-        icon_name: data.icon_name,
-        order_index: data.order_index,
-        is_active: data.is_active,
-      })
+      .update(updates)
       .eq("id", id);
 
     if (updateError) throw updateError;

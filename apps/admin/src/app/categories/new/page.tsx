@@ -3,6 +3,7 @@
 import { supabase } from "@/lib/supabase";
 import { Sidebar } from "@/components/Sidebar";
 import { CategoryForm } from "@/components/categories/CategoryForm";
+import { generateSlug } from "@/lib/utils";
 
 export default function NewCategoryPage() {
   const handleSubmit = async (data: {
@@ -11,12 +12,17 @@ export default function NewCategoryPage() {
     order_index: number;
     is_active: boolean;
   }) => {
-    const { error } = await supabase.from("categories").insert({
-      name: data.name,
-      icon_name: data.icon_name,
-      order_index: data.order_index,
-      is_active: data.is_active,
-    });
+    const slug = generateSlug(data.name);
+
+    const { error } = await supabase
+      .from("categories")
+      .insert({
+        name: data.name,
+        icon_name: data.icon_name,
+        slug: slug,
+        order_index: data.order_index,
+        is_active: data.is_active,
+      });
 
     if (error) throw error;
   };

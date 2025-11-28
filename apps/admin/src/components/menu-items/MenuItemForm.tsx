@@ -92,9 +92,8 @@ export function MenuItemForm({ menuItem, onSubmit }: MenuItemFormProps) {
     try {
       const { data, error } = await supabase
         .from("venues")
-        .select("id, name, category_id, categories(name, icon)")
-        .eq("is_active", true)
-        .order("name", { ascending: true });
+        .select('*')
+        .eq("is_active", true);
 
       if (error) throw error;
       setVenues(data || []);

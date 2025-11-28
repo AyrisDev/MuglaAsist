@@ -82,8 +82,8 @@ export function CategoryTable({ categories, onDelete }: CategoryTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                   {category.order_index}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-2xl">
-                  {category.icon_name}
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="text-2xl">{category.icon_name}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm font-medium text-gray-900">
