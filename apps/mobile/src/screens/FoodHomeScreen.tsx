@@ -1,97 +1,116 @@
-import React, { useState, useMemo } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useMemo, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
   ActivityIndicator,
+  FlatList,
   ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Ionicons } from '@expo/vector-icons';
-import { FoodStackParamList } from '../navigation/FoodStackNavigator';
-import { useCategories } from '../hooks/useCategories';
-import { useVenues } from '../hooks/useVenues';
 import CategoryChip from '../components/CategoryChip';
 import VenueCard from '../components/VenueCard';
 import { Colors } from '../constants/Colors';
+import { useCategories } from '../hooks/useCategories';
+import { useVenues } from '../hooks/useVenues';
+import { FoodStackParamList } from '../navigation/FoodStackNavigator';
+import { isVenueOpen } from '../utils/isVenueOpen';
 
 type Props = NativeStackScreenProps<FoodStackParamList, 'Geri'>;
 
 export default function FoodHomeScreen({ navigation }: Props) {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  // selectedCategoryId: 0 for All, -1 for Open Now, >0 for specific categories
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data: categories, isLoading: categoriesLoading } = useCategories();
   const { data: venues, isLoading: venuesLoading } = useVenues({
-    categoryId: selectedCategoryId || undefined,
+    categoryId: selectedCategoryId > 0 ? selectedCategoryId : undefined,
   });
 
-  // Filter venues by search query (must be before early returns)
+  // Filter venues
   const filteredVenues = useMemo(() => {
     if (!venues) return [];
-    if (!searchQuery.trim()) return venues;
 
-    const query = searchQuery.toLowerCase().trim();
-    return venues.filter((venue) =>
-      venue.name.toLowerCase().includes(query)
-    );
-  }, [venues, searchQuery]);
+    let result = venues;
+
+    // Filter by Open Now if selected
+    if (selectedCategoryId === -1) {
+      result = result.filter(venue => isVenueOpen(venue.hours));
+    }
+
+    // Filter by Search Query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      result = result.filter((venue) =>
+        venue.name.toLowerCase().includes(query)
+      );
+    }
+
+    return result;
+  }, [venues, searchQuery, selectedCategoryId]);
 
   if (categoriesLoading) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={Colors.primary} />
-        <Text style={styles.loadingText}>Yükleniyor...</Text>
       </View>
     );
   }
 
-  // Add "Tümü" category at the beginning
-  const allCategories = categories
-    ? [{ id: 0, name: 'Tümü', icon: '', is_active: true, created_at: '' }, ...categories]
-    : [];
+  // Construct chips data
+  // 0: All, -1: Open Now, then categories
+  const allChips = [
+    { id: 0, name: 'All', icon: '', is_active: true, created_at: '' },
+    { id: -1, name: 'Open Now', icon: '', is_active: true, created_at: '' },
+    ...(categories || []),
+  ];
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate('Dashboard' as any)} // Navigate back to Dashboard
+        >
+          <Ionicons name="chevron-back" size={28} color={Colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Venues</Text>
+        <View style={{ width: 28 }} /> {/* Spacer for alignment */}
+      </View>
+
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={20} color={Colors.textSecondary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
-          placeholder="Mekan ara..."
+          placeholder="Search for a cafe, shop..."
           placeholderTextColor={Colors.textSecondary}
           value={searchQuery}
           onChangeText={setSearchQuery}
           autoCapitalize="none"
           autoCorrect={false}
         />
-        {searchQuery.length > 0 && (
-          <Ionicons
-            name="close-circle"
-            size={20}
-            color={Colors.textSecondary}
-            style={styles.clearIcon}
-            onPress={() => setSearchQuery('')}
-          />
-        )}
       </View>
 
-      {/* Categories */}
+      {/* Categories / Filters */}
       <View style={styles.categoriesSection}>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.categoriesContainer}
         >
-          {allCategories.map((category) => (
+          {allChips.map((chip) => (
             <CategoryChip
-              key={category.id}
-              category={category}
-              isActive={selectedCategoryId === category.id || (category.id === 0 && selectedCategoryId === null)}
-              onPress={() => setSelectedCategoryId(category.id === 0 ? null : category.id)}
+              key={chip.id}
+              category={chip}
+              isActive={selectedCategoryId === chip.id}
+              onPress={() => setSelectedCategoryId(chip.id)}
             />
           ))}
         </ScrollView>
@@ -119,13 +138,8 @@ export default function FoodHomeScreen({ navigation }: Props) {
       ) : (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>
-            {searchQuery ? 'Arama sonucu bulunamadı' : 'Mekan bulunamadı'}
+            No venues found
           </Text>
-          {searchQuery && (
-            <Text style={styles.emptySubtext}>
-              "{searchQuery}" için sonuç yok
-            </Text>
-          )}
         </View>
       )}
     </SafeAreaView>
@@ -143,32 +157,40 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.background,
   },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: Colors.textSecondary,
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  backButton: {
+    padding: 4,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.text,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: Colors.surface,
-    borderRadius: 12,
+    backgroundColor: Colors.surfaceLight, // Using lighter brown for input
+    borderRadius: 24, // More rounded as per design
     marginHorizontal: 16,
-    marginTop: 16,
-    marginBottom: 12,
-    paddingHorizontal: 12,
+    marginTop: 8,
+    marginBottom: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: 12,
   },
   searchInput: {
     flex: 1,
-    height: 44,
-    fontSize: 15,
+    fontSize: 16,
     color: Colors.text,
-  },
-  clearIcon: {
-    marginLeft: 8,
+    padding: 0, // Reset default padding
   },
   categoriesSection: {
     marginBottom: 16,
@@ -189,12 +211,6 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: 16,
     color: Colors.textSecondary,
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: Colors.textTertiary,
     textAlign: 'center',
   },
 });

@@ -10,21 +10,20 @@ export default ({ config }) => ({
   newArchEnabled: true,
   ios: {
     supportsTablet: true,
-    bundleIdentifier: 'com.mugla.asist',
+    bundleIdentifier: 'com.ayristech.muglaasist',
   },
-  android: {
-    adaptiveIcon: {
-      backgroundColor: '#1a1a1a',
-      foregroundImage: './assets/images/android-icon-foreground.png',
-      backgroundImage: './assets/images/android-icon-background.png',
-      monochromeImage: './assets/images/android-icon-monochrome.png',
-    },
-    package: 'com.mugla.asist',
-    edgeToEdgeEnabled: true,
-    predictiveBackGestureEnabled: false,
+android: {
+  adaptiveIcon: {
+    foregroundImage: "./assets/images/icon.png", // Var olan ana ikonunu göster
+    backgroundColor: "#ffffffff" // Arka planı renk koduyla hallet (Resim dosyasına gerek yok)
   },
+  package: 'com.ayristech.muglaasist',
+  versionCode: 1,
+  edgeToEdgeEnabled: true,
+  predictiveBackGestureEnabled: false,
+},
   web: {
-    output: 'static',
+    output: 'single',
     favicon: './assets/images/favicon.png',
   },
   plugins: [
@@ -42,6 +41,9 @@ export default ({ config }) => ({
     ],
   ],
   extra: {
+    eas: {
+      projectId: "9657272f-5ec1-4b76-866d-f14499743337"
+    },
     supabaseUrl: process.env.EXPO_PUBLIC_SUPABASE_URL,
     supabaseAnonKey: process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY,
   },

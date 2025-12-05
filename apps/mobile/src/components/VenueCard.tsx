@@ -1,8 +1,9 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { VenueWithCategory } from '../types/database';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Colors';
+import { VenueWithCategory } from '../types/database';
+import { isVenueOpen } from '../utils/isVenueOpen';
 
 interface VenueCardProps {
   venue: VenueWithCategory;
@@ -10,41 +11,27 @@ interface VenueCardProps {
 }
 
 export default function VenueCard({ venue, onPress }: VenueCardProps) {
+  const isOpen = isVenueOpen(venue.hours);
+
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      {/* Venue Image */}
-      <View style={styles.imageContainer}>
-        {venue.logo_url ? (
-          <Image source={{ uri: venue.logo_url }} style={styles.image} />
-        ) : (
-          <View style={[styles.image, styles.imagePlaceholder]}>
-            <Ionicons name="restaurant-outline" size={32} color={Colors.textSecondary} />
-          </View>
-        )}
-      </View>
-
-      {/* Content */}
       <View style={styles.content}>
+        {/* Name */}
         <Text style={styles.name} numberOfLines={1}>
           {venue.name}
         </Text>
 
-        <View style={styles.metaContainer}>
-          {/* Rating */}
-          {venue.rating && (
-            <View style={styles.metaItem}>
-              <Ionicons name="star" size={16} color={Colors.star} />
-              <Text style={styles.metaText}>{venue.rating.toFixed(1)}</Text>
-            </View>
-          )}
+        {/* Category */}
+        <Text style={styles.category}>
+          {venue.categories?.name || 'Venue'}
+        </Text>
 
-          {/* Distance */}
-          {venue.distance && (
-            <View style={styles.metaItem}>
-              <Ionicons name="location" size={16} color={Colors.textSecondary} />
-              <Text style={styles.metaText}>{venue.distance}</Text>
-            </View>
-          )}
+        {/* Status */}
+        <View style={styles.statusContainer}>
+          <View style={[styles.statusDot, { backgroundColor: isOpen ? Colors.open : Colors.closed }]} />
+          <Text style={[styles.statusText, { color: isOpen ? Colors.open : Colors.closed }]}>
+            {isOpen ? 'Open Now' : 'Closed'}
+          </Text>
         </View>
       </View>
 
@@ -59,45 +46,39 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.surface,
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 16,
+    padding: 16,
     marginBottom: 12,
-  },
-  imageContainer: {
-    marginRight: 12,
-  },
-  image: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-  },
-  imagePlaceholder: {
-    backgroundColor: Colors.surfaceLight,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   content: {
     flex: 1,
     justifyContent: 'center',
   },
   name: {
-    fontSize: 17,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: 'bold',
     color: Colors.text,
-    marginBottom: 8,
+    marginBottom: 4,
   },
-  metaContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  metaText: {
+  category: {
     fontSize: 14,
     color: Colors.textSecondary,
+    marginBottom: 8,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 6,
+  },
+  statusText: {
+    fontSize: 13,
+    fontWeight: '500',
   },
 });

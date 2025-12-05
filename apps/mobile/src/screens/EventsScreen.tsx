@@ -1,15 +1,18 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { EventsStackParamList } from '../navigation/EventsStackNavigator';
-import { useEvents } from '../hooks/useEvents';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import EventCard from '../components/EventCard';
 import { Colors } from '../constants/Colors';
+import { useEvents } from '../hooks/useEvents';
+import { EventsStackParamList } from '../navigation/EventsStackNavigator';
 
 type Props = NativeStackScreenProps<EventsStackParamList, 'Geri'>;
 
 export default function EventsScreen({ navigation }: Props) {
+  const { t } = useTranslation();
   const { data: events, isLoading, error } = useEvents({ upcoming: true });
 
   if (isLoading) {
@@ -17,7 +20,6 @@ export default function EventsScreen({ navigation }: Props) {
       <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Etkinlikler yükleniyor...</Text>
         </View>
       </SafeAreaView>
     );
@@ -27,7 +29,7 @@ export default function EventsScreen({ navigation }: Props) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Bir hata oluştu</Text>
+          <Text style={styles.errorText}>{t('common.error')}</Text>
           <Text style={styles.errorSubtext}>{(error as Error).message}</Text>
         </View>
       </SafeAreaView>
@@ -38,8 +40,13 @@ export default function EventsScreen({ navigation }: Props) {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Etkinlikler</Text>
-        <Text style={styles.subtitle}>Yaklaşan kampüs etkinlikleri</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Dashboard' as any)}>
+          <Ionicons name="calendar-outline" size={24} color={Colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.title}>{t('events.title')}</Text>
+        <TouchableOpacity>
+          <Ionicons name="search" size={24} color={Colors.text} />
+        </TouchableOpacity>
       </View>
 
       {/* Events List */}
@@ -59,9 +66,9 @@ export default function EventsScreen({ navigation }: Props) {
         />
       ) : (
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>Yaklaşan etkinlik bulunmuyor</Text>
+          <Text style={styles.emptyText}>{t('common.noData')}</Text>
           <Text style={styles.emptySubtext}>
-            Yeni etkinlikler eklendiğinde burada görünecek
+            {t('events.noDescription')}
           </Text>
         </View>
       )}
@@ -75,29 +82,22 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   header: {
-    paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    marginBottom: 8,
   },
   title: {
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: 'bold',
     color: Colors.text,
-    marginBottom: 4,
-  },
-  subtitle: {
-    fontSize: 14,
-    color: Colors.textSecondary,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: Colors.textSecondary,
   },
   errorContainer: {
     flex: 1,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   listContent: {
-    padding: 16,
+    padding: 20,
     paddingTop: 0,
   },
   emptyContainer: {
@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   emptyText: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: 'bold',
     color: Colors.textSecondary,
     marginBottom: 8,
     textAlign: 'center',

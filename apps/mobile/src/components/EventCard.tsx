@@ -1,8 +1,9 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Event } from '../types/database';
+import { LinearGradient } from 'expo-linear-gradient';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Colors';
+import { Event } from '../types/database';
 
 interface EventCardProps {
   event: Event;
@@ -10,133 +11,132 @@ interface EventCardProps {
 }
 
 export default function EventCard({ event, onPress }: EventCardProps) {
-  // Format date (e.g., "15 Ara 2024")
-  const formatDate = (dateString: string) => {
+  // Format date (e.g., "Fri, Oct 28 • 7:00 PM")
+  const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
-    const day = date.getDate();
-    const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
-  };
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-  // Format time (e.g., "14:30")
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    const hours = String(date.getHours()).padStart(2, '0');
+    const dayName = days[date.getDay()];
+    const monthName = months[date.getMonth()];
+    const day = date.getDate();
+
+    let hours = date.getHours();
     const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+
+    return `${dayName}, ${monthName} ${day} • ${hours}:${minutes} ${ampm}`;
   };
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={onPress}
-      disabled={!onPress}
-    >
+    <View style={styles.container}>
       {/* Event Image */}
-      {event.poster_url ? (
-        <Image source={{ uri: event.poster_url }} style={styles.image} />
-      ) : (
-        <View style={[styles.image, styles.imagePlaceholder]}>
-          <Ionicons name="calendar" size={40} color={Colors.textSecondary} />
-        </View>
-      )}
+      <View style={styles.imageContainer}>
+        {event.image ? (
+          <Image source={{ uri: event.image }} style={styles.image} resizeMode="stretch" />
+        ) : (
+          <View style={[styles.image, styles.imagePlaceholder]}>
+            <Ionicons name="calendar" size={64} color={Colors.textSecondary} />
+          </View>
+        )}
 
-      {/* Content */}
+        {/* Gradient Overlay for Text Readability */}
+        <LinearGradient
+          colors={['transparent', 'rgba(0,0,0,0.8)']}
+          style={styles.gradient}
+        />
+      </View>
+
+      {/* Content Overlay */}
       <View style={styles.content}>
         <Text style={styles.title} numberOfLines={2}>
-          {event.title}
+          {event.name}
         </Text>
 
-        {event.description && (
-          <Text style={styles.description} numberOfLines={2}>
-            {event.description}
-          </Text>
-        )}
+        <Text style={styles.metaText} numberOfLines={1}>
+          {formatDateTime(event.date)} • {event.location || 'TBA'}
+        </Text>
 
-        {/* Date & Time */}
-        <View style={styles.metaContainer}>
-          <View style={styles.metaItem}>
-            <Ionicons name="calendar-outline" size={14} color={Colors.primary} />
-            <Text style={styles.metaText}>{formatDate(event.event_date)}</Text>
-          </View>
-          <View style={styles.metaItem}>
-            <Ionicons name="time-outline" size={14} color={Colors.primary} />
-            <Text style={styles.metaText}>{formatTime(event.event_date)}</Text>
-          </View>
-        </View>
-
-        {/* Location */}
-        {event.location && (
-          <View style={styles.locationContainer}>
-            <Ionicons name="location-outline" size={14} color={Colors.textSecondary} />
-            <Text style={styles.locationText} numberOfLines={1}>
-              {event.location}
-            </Text>
-          </View>
-        )}
+        <TouchableOpacity
+          style={styles.joinButton}
+          onPress={onPress}
+          activeOpacity={0.8}
+        >
+          <Text style={styles.joinButtonText}>Join</Text>
+        </TouchableOpacity>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     backgroundColor: Colors.surface,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
+    borderRadius: 24,
+    marginBottom: 20,
+    overflow: 'hidden',
+    height: 520, // Increased height for taller poster look
+    position: 'relative',
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  imageContainer: {
+    width: '100%',
+    height: '100%',
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-    marginRight: 12,
+    width: '100%',
+    height: '100%',
   },
   imagePlaceholder: {
     backgroundColor: Colors.surfaceLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '60%', // Gradient covers bottom 60%
+  },
   content: {
-    flex: 1,
-    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 20,
   },
   title: {
-    fontSize: 16,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  description: {
-    fontSize: 13,
-    color: Colors.textSecondary,
+    color: '#fff',
     marginBottom: 8,
-  },
-  metaContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 4,
-  },
-  metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
   metaText: {
-    fontSize: 12,
-    color: Colors.primary,
+    fontSize: 14,
+    color: '#e0e0e0', // Light grey for readability on dark
+    marginBottom: 16,
     fontWeight: '500',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: { width: -1, height: 1 },
+    textShadowRadius: 10,
   },
-  locationContainer: {
-    flexDirection: 'row',
+  joinButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: 12,
+    borderRadius: 12,
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'center',
   },
-  locationText: {
-    fontSize: 12,
-    color: Colors.textSecondary,
+  joinButtonText: {
+    color: '#fff', // White text on orange button
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

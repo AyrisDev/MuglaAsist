@@ -1,103 +1,90 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Deal } from '../types/database';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Colors';
+import { DealWithVenue } from '../types/database';
 
 interface DealCardProps {
-  deal: Deal;
+  deal: DealWithVenue;
   onPress?: () => void;
 }
 
 export default function DealCard({ deal, onPress }: DealCardProps) {
-  // Format date (e.g., "15 Ara")
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const months = ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'];
-    const month = months[date.getMonth()];
-    return `${day} ${month}`;
-  };
-
   // Calculate remaining days
-  const getRemainingDays = (endDateString: string) => {
+  const getRemainingDaysText = (endDateString: string) => {
     const endDate = new Date(endDateString);
     const today = new Date();
     const diffTime = endDate.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'Bugün sona eriyor';
-    if (diffDays === 1) return 'Yarın sona eriyor';
-    if (diffDays < 7) return `${diffDays} gün kaldı`;
-    return null;
+    if (diffDays <= 0) return 'Expired';
+    if (diffDays === 1) return 'Expires tomorrow';
+    return `Expires in ${diffDays} days`;
   };
 
-  const remainingDays = getRemainingDays(deal.valid_until);
+  const expiryText = getRemainingDaysText(deal.endDate);
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={onPress}
-      disabled={!onPress}
-    >
+    <View style={styles.container}>
       {/* Deal Image */}
-      {deal.image_url ? (
-        <Image source={{ uri: deal.image_url }} style={styles.image} />
-      ) : (
-        <View style={[styles.image, styles.imagePlaceholder]}>
-          <Ionicons name="pricetag" size={40} color={Colors.textSecondary} />
-        </View>
-      )}
+      <View style={styles.imageContainer}>
+        {deal.image ? (
+          <Image source={{ uri: deal.image }} style={styles.image} resizeMode="cover" />
+        ) : (
+          <View style={[styles.image, styles.imagePlaceholder]}>
+            <Ionicons name="pricetag" size={64} color={Colors.textSecondary} />
+          </View>
+        )}
+      </View>
 
       {/* Content */}
       <View style={styles.content}>
+        <Text style={styles.venueName}>
+          {deal.venues?.name || 'Venue Name'}
+        </Text>
+
         <Text style={styles.title} numberOfLines={2}>
           {deal.title}
         </Text>
 
         {deal.description && (
-          <Text style={styles.description} numberOfLines={2}>
+          <Text style={styles.description} numberOfLines={3}>
             {deal.description}
           </Text>
         )}
 
-        {/* Date Range */}
-        <View style={styles.metaContainer}>
-          <View style={styles.metaItem}>
-            <Ionicons name="calendar-outline" size={14} color={Colors.primary} />
-            <Text style={styles.metaText}>
-              {formatDate(deal.valid_from)} - {formatDate(deal.valid_until)}
-            </Text>
-          </View>
-        </View>
+        <View style={styles.footer}>
+          <Text style={styles.expiryText}>{expiryText}</Text>
 
-        {/* Remaining Days Badge */}
-        {remainingDays && (
-          <View style={styles.badgeContainer}>
-            <View style={styles.badge}>
-              <Ionicons name="time-outline" size={12} color={Colors.primary} />
-              <Text style={styles.badgeText}>{remainingDays}</Text>
-            </View>
-          </View>
-        )}
+          <TouchableOpacity
+            style={styles.claimButton}
+            onPress={onPress}
+            activeOpacity={0.8}
+          >
+            <Text style={styles.claimButtonText}>Claim Offer</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     backgroundColor: Colors.surface,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
+    borderRadius: 24,
+    marginBottom: 20,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  imageContainer: {
+    width: '100%',
+    height: 180,
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 8,
-    marginRight: 12,
+    width: '100%',
+    height: '100%',
   },
   imagePlaceholder: {
     backgroundColor: Colors.surfaceLight,
@@ -105,51 +92,45 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   content: {
-    flex: 1,
-    justifyContent: 'space-between',
+    padding: 16,
+  },
+  venueName: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+    marginBottom: 4,
   },
   title: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     color: Colors.text,
-    marginBottom: 4,
-  },
-  description: {
-    fontSize: 13,
-    color: Colors.textSecondary,
     marginBottom: 8,
   },
-  metaContainer: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 4,
+  description: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+    marginBottom: 16,
+    lineHeight: 20,
   },
-  metaItem: {
+  footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    justifyContent: 'space-between',
+    marginTop: 8,
   },
-  metaText: {
-    fontSize: 12,
+  expiryText: {
+    fontSize: 14,
     color: Colors.primary,
     fontWeight: '500',
   },
-  badgeContainer: {
-    marginTop: 4,
+  claimButton: {
+    backgroundColor: Colors.primary,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
   },
-  badge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: Colors.surfaceLight,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    alignSelf: 'flex-start',
-  },
-  badgeText: {
-    fontSize: 11,
-    color: Colors.primary,
-    fontWeight: '600',
+  claimButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
 });

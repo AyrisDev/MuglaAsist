@@ -1,0 +1,158 @@
+{
+    "common": {
+        "back": "Back",
+        "share": "Share",
+        "call": "Call",
+        "addToCalendar": "Add to Calendar",
+        "openInMap": "Open in Map",
+        "location": "Location",
+        "about": "About",
+        "loading": "Loading...",
+        "error": "Error",
+        "noData": "No data found",
+        "search": "Search",
+        "filter": "Filter",
+        "save": "Save",
+        "cancel": "Cancel",
+        "ok": "OK",
+        "yes": "Yes",
+        "no": "No",
+        "close": "Close",
+        "open": "Open",
+        "closed": "Closed"
+    },
+    "navigation": {
+        "dashboard": "Home",
+        "events": "Events",
+        "deals": "Deals",
+        "life": "Life",
+        "profile": "Profile",
+        "map": "Map",
+        "transport": "Transport",
+        "food": "Food",
+        "barbers": "Barbers",
+        "hairdresser": "Hairdressers",
+        "pharmacies": "Pharmacies",
+        "busSchedule": "Bus Schedule"
+    },
+    "events": {
+        "title": "Events",
+        "eventDetail": "Event Details",
+        "notFound": "Event not found",
+        "noDescription": "No description available for this event.",
+        "noVenue": "No venue information",
+        "noLocation": "Location not specified",
+        "noPhone": "No phone number available for this venue.",
+        "aboutEvent": "About Event",
+        "mapView": "Map View",
+        "months": {
+            "jan": "Jan",
+            "feb": "Feb",
+            "mar": "Mar",
+            "apr": "Apr",
+            "may": "May",
+            "jun": "Jun",
+            "jul": "Jul",
+            "aug": "Aug",
+            "sep": "Sep",
+            "oct": "Oct",
+            "nov": "Nov",
+            "dec": "Dec"
+        }
+    },
+    "deals": {
+        "title": "Deals",
+        "dealDetail": "Deal Details",
+        "notFound": "Deal not found",
+        "noDescription": "No description available for this deal.",
+        "noVenue": "No venue information",
+        "noLocation": "Location not specified",
+        "noPhone": "No phone number available for this venue.",
+        "aboutDeal": "About Deal",
+        "validUntil": "Valid Until",
+        "discount": "Discount",
+        "mapView": "Map View"
+    },
+    "venues": {
+        "title": "Venues",
+        "venueDetail": "Venue Details",
+        "notFound": "Venue not found",
+        "noDescription": "No description available for this venue.",
+        "noPhone": "No phone number available.",
+        "noLocation": "Location not specified",
+        "aboutVenue": "About Venue",
+        "menu": "Menu",
+        "hours": "Opening Hours",
+        "contact": "Contact",
+        "mapView": "Map View"
+    },
+    "dashboard": {
+        "welcome": "Welcome",
+        "explore": "Explore",
+        "categories": "Categories",
+        "popularEvents": "Popular Events",
+        "popularDeals": "Popular Deals",
+        "nearbyVenues": "Nearby Venues"
+    },
+    "life": {
+        "title": "Life",
+        "transport": "Transport",
+        "food": "Food",
+        "barbers": "Barbers",
+        "hairdresser": "Hairdressers",
+        "pharmacies": "Pharmacies"
+    },
+    "transport": {
+        "title": "Transport",
+        "busSchedule": "Bus Schedule",
+        "routes": "Routes",
+        "stops": "Stops"
+    },
+    "food": {
+        "title": "Food",
+        "restaurants": "Restaurants",
+        "cafes": "Cafes",
+        "fastFood": "Fast Food",
+        "categories": "Categories"
+    },
+    "pharmacies": {
+        "title": "Pharmacies",
+        "onDuty": "On Duty Pharmacies",
+        "nearby": "Nearby Pharmacies",
+        "search": "Search Pharmacy"
+    },
+    "profile": {
+        "title": "Profile",
+        "settings": "Settings",
+        "language": "Language",
+        "notifications": "Notifications",
+        "about": "About",
+        "logout": "Logout",
+        "selectLanguage": "Select Language",
+        "turkish": "Turkish",
+        "english": "English"
+    },
+    "onboarding": {
+        "skip": "Skip",
+        "next": "Next",
+        "getStarted": "Get Started",
+        "slide1": {
+            "title": "Discover Muğla",
+            "description": "Explore all events, deals and venues in the city"
+        },
+        "slide2": {
+            "title": "Don't Miss Deals",
+            "description": "Keep track of the best deals and discounts"
+        },
+        "slide3": {
+            "title": "Easy Access",
+            "description": "Easily access bus schedules, pharmacies and more"
+        }
+    },
+    "alerts": {
+        "info": "Info",
+        "warning": "Warning",
+        "error": "Error",
+        "success": "Success"
+    }
+}

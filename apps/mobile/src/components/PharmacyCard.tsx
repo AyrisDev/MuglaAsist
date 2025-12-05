@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Pharmacy } from '../types/database';
+import React from 'react';
+import { Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../constants/Colors';
+import { Pharmacy } from '../types/database';
 
 interface PharmacyCardProps {
   pharmacy: Pharmacy;
@@ -28,44 +28,40 @@ export default function PharmacyCard({ pharmacy, isOnDuty = false }: PharmacyCar
   };
 
   return (
-    <View style={[styles.container, isOnDuty && styles.onDutyContainer]}>
-      {/* On Duty Badge */}
-      {isOnDuty && (
-        <View style={styles.onDutyBadge}>
-          <Ionicons name="star" size={14} color={Colors.primary} />
-          <Text style={styles.onDutyText}>Nöbetçi</Text>
-        </View>
-      )}
+    <View style={styles.container}>
+      {/* Left Side: Info */}
+      <View style={styles.infoContainer}>
+        <Text style={styles.name} numberOfLines={1}>
+          {pharmacy.name}
+        </Text>
 
-      {/* Pharmacy Info */}
-      <View style={styles.header}>
-        <View style={[styles.iconContainer, isOnDuty && styles.onDutyIconContainer]}>
-          <Ionicons name="medical" size={24} color={Colors.primary} />
+        {/* Status */}
+        <View style={styles.statusContainer}>
+          <View style={[styles.statusDot, { backgroundColor: isOnDuty ? '#4CAF50' : '#F44336' }]} />
+          <Text style={styles.statusText}>
+            {isOnDuty ? 'Open • Nöbetçi Eczane' : 'Closed • 08:30 - 18:30'}
+          </Text>
         </View>
-        <View style={styles.headerText}>
-          <Text style={styles.name}>{pharmacy.name}</Text>
-          {pharmacy.address && (
-            <Text style={styles.address} numberOfLines={2}>
-              {pharmacy.address}
-            </Text>
-          )}
-        </View>
+
+        {/* Address */}
+        {pharmacy.address && (
+          <Text style={styles.address} numberOfLines={1}>
+            {pharmacy.address}
+          </Text>
+        )}
       </View>
 
-      {/* Actions */}
-      <View style={styles.actions}>
+      {/* Right Side: Actions */}
+      <View style={styles.actionsContainer}>
         {pharmacy.phone && (
-          <TouchableOpacity style={styles.actionButton} onPress={handlePhonePress}>
+          <TouchableOpacity style={styles.callButton} onPress={handlePhonePress}>
             <Ionicons name="call" size={20} color={Colors.primary} />
-            <Text style={styles.actionText}>Ara</Text>
           </TouchableOpacity>
         )}
-        {(pharmacy.latitude || pharmacy.address) && (
-          <TouchableOpacity style={styles.actionButton} onPress={handleLocationPress}>
-            <Ionicons name="location" size={20} color={Colors.primary} />
-            <Text style={styles.actionText}>Konum</Text>
-          </TouchableOpacity>
-        )}
+
+        <TouchableOpacity style={styles.directionButton} onPress={handleLocationPress}>
+          <Ionicons name="navigate" size={20} color="#fff" />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -73,83 +69,63 @@ export default function PharmacyCard({ pharmacy, isOnDuty = false }: PharmacyCar
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     backgroundColor: Colors.surface,
-    borderRadius: 12,
+    borderRadius: 24,
     padding: 16,
     marginBottom: 12,
-    position: 'relative',
-  },
-  onDutyContainer: {
-    backgroundColor: Colors.primary + '15',
-    borderWidth: 2,
-    borderColor: Colors.primary + '40',
-  },
-  onDutyBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    backgroundColor: Colors.primary,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
-  onDutyText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.background,
-  },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 12,
-  },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: Colors.surfaceLight,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  onDutyIconContainer: {
-    backgroundColor: Colors.primary + '30',
-  },
-  headerText: {
+  infoContainer: {
     flex: 1,
-    paddingRight: 60, // Space for badge
+    marginRight: 16,
   },
   name: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     color: Colors.text,
-    marginBottom: 4,
+    marginBottom: 6,
+  },
+  statusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  statusDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginRight: 6,
+  },
+  statusText: {
+    fontSize: 14,
+    color: Colors.textSecondary,
+    fontWeight: '500',
   },
   address: {
     fontSize: 13,
-    color: Colors.textSecondary,
-    lineHeight: 18,
+    color: Colors.textTertiary,
   },
-  actions: {
+  actionsContainer: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 12,
   },
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
+  callButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Colors.surfaceLight,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
-    backgroundColor: Colors.surfaceLight,
-    paddingVertical: 10,
-    borderRadius: 8,
   },
-  actionText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.primary,
+  directionButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

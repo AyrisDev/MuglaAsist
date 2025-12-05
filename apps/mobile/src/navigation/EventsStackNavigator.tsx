@@ -1,8 +1,7 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import EventsScreen from '../screens/EventsScreen';
+import React from 'react';
 import EventDetailScreen from '../screens/EventDetailScreen';
-import { Colors } from '../constants/Colors';
+import EventsScreen from '../screens/EventsScreen';
 
 export type EventsStackParamList = {
   Geri: undefined;
@@ -17,7 +16,7 @@ export default function EventsStackNavigator() {
       screenOptions={{
         headerShown: false,
       }}
-    > 
+    >
       <Stack.Screen
         name="Geri"
         component={EventsScreen}
@@ -26,16 +25,7 @@ export default function EventsStackNavigator() {
         name="EventDetail"
         component={EventDetailScreen}
         options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: Colors.surface,
-          },
-          headerTintColor: Colors.text,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          headerShadowVisible: false,
-          title: '',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

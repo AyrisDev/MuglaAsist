@@ -13,15 +13,17 @@ export function useDeals(options: UseDealsOptions = {}) {
     queryKey: ['deals', active],
     queryFn: async () => {
       let query = supabase
-        .from('deals')
-        .select('*')
-        .eq('is_active', true)
-        .order('valid_until', { ascending: true });
+        .from('campaigns')
+        .select(`
+          *,
+          venues(*)
+        `)
+        .order('endDate', { ascending: true });
 
       // Only get active deals (end date in the future)
       if (active) {
         const now = new Date().toISOString();
-        query = query.gte('valid_until', now);
+        query = query.gte('endDate', now);
       }
 
       const { data, error } = await query;

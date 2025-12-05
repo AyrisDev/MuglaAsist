@@ -1,25 +1,37 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { DealsStackParamList } from '../navigation/DealsStackNavigator';
-import { useDeals } from '../hooks/useDeals';
+import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import DealCard from '../components/DealCard';
 import { Colors } from '../constants/Colors';
+import { useDeals } from '../hooks/useDeals';
+import { DealsStackParamList } from '../navigation/DealsStackNavigator';
 
 type Props = NativeStackScreenProps<DealsStackParamList, 'Geri'>;
 
+type FilterCategory = 'All' | 'Food' | 'Books' | 'Events' | 'Sports';
+
 export default function DealsScreen({ navigation }: Props) {
+  const { t } = useTranslation();
   const { data: deals, isLoading, error } = useDeals({ active: true });
+  const [activeFilter, setActiveFilter] = useState<FilterCategory>('All');
+
+  // Filter deals based on active filter
+  const filteredDeals = useMemo(() => {
+    if (!deals || activeFilter === 'All') return deals;
+
+    // For now, we'll show all deals regardless of filter
+    // In a real app, you'd filter based on deal.category or deal.venues.category
+    return deals;
+  }, [deals, activeFilter]);
 
   if (isLoading) {
     return (
-      <SafeAreaView style={styles.container} edges={['top']}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={Colors.primary} />
-          <Text style={styles.loadingText}>Kampanyalar yükleniyor...</Text>
-        </View>
-      </SafeAreaView>
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
     );
   }
 
@@ -27,7 +39,7 @@ export default function DealsScreen({ navigation }: Props) {
     return (
       <SafeAreaView style={styles.container} edges={['top']}>
         <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>Bir hata oluştu</Text>
+          <Text style={styles.errorText}>{t('common.error')}</Text>
           <Text style={styles.errorSubtext}>{(error as Error).message}</Text>
         </View>
       </SafeAreaView>
@@ -38,33 +50,53 @@ export default function DealsScreen({ navigation }: Props) {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.title}>Kampanyalar</Text>
-        <Text style={styles.subtitle}>Aktif indirim ve fırsatlar</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="chevron-back" size={28} color={Colors.text} />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t('deals.title')}</Text>
+        <View style={{ width: 28 }} />
+      </View>
+
+      {/* Filter Chips */}
+      <View style={styles.filterContainer}>
+        {(['All', 'Food', 'Books', 'Events', 'Sports'] as FilterCategory[]).map((filter) => (
+          <TouchableOpacity
+            key={filter}
+            style={[
+              styles.filterChip,
+              activeFilter === filter && styles.activeFilterChip
+            ]}
+            onPress={() => setActiveFilter(filter)}
+          >
+            <Text style={[
+              styles.filterText,
+              activeFilter === filter && styles.activeFilterText
+            ]}>
+              {filter}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* Deals List */}
-      {deals && deals.length > 0 ? (
-        <FlatList
-          data={deals}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <DealCard
-              deal={item}
-              onPress={() => {
-                navigation.navigate('DealDetail', { dealId: item.id });
-              }}
-            />
-          )}
-          contentContainerStyle={styles.listContent}
-        />
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>Aktif kampanya bulunmuyor</Text>
-          <Text style={styles.emptySubtext}>
-            Yeni kampanyalar eklendiğinde burada görünecek
-          </Text>
-        </View>
-      )}
+      <FlatList
+        data={filteredDeals}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <DealCard
+            deal={item}
+            onPress={() => {
+              navigation.navigate('DealDetail', { dealId: item.id });
+            }}
+          />
+        )}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>{t('common.noData')}</Text>
+          </View>
+        }
+      />
     </SafeAreaView>
   );
 }
@@ -75,29 +107,51 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 12,
+    paddingVertical: 12,
   },
-  title: {
-    fontSize: 28,
+  backButton: {
+    padding: 4,
+  },
+  headerTitle: {
+    fontSize: 20,
     fontWeight: 'bold',
     color: Colors.text,
-    marginBottom: 4,
   },
-  subtitle: {
-    fontSize: 14,
+  filterContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    marginBottom: 16,
+    gap: 12,
+  },
+  filterChip: {
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderRadius: 20,
+    backgroundColor: Colors.surface,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  activeFilterChip: {
+    backgroundColor: Colors.primary,
+    borderColor: Colors.primary,
+  },
+  filterText: {
     color: Colors.textSecondary,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  activeFilterText: {
+    color: '#fff',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 14,
-    color: Colors.textSecondary,
+    backgroundColor: Colors.background,
   },
   errorContainer: {
     flex: 1,
@@ -124,18 +178,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 40,
   },
   emptyText: {
     fontSize: 16,
-    fontWeight: '600',
     color: Colors.textSecondary,
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: Colors.textTertiary,
-    textAlign: 'center',
   },
 });

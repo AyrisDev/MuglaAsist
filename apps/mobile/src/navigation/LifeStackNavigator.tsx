@@ -1,11 +1,11 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LifeScreen from '../screens/LifeScreen';
-import PharmaciesScreen from '../screens/PharmaciesScreen';
+import React from 'react';
+import { Colors } from '../constants/Colors';
 import BarbersScreen from '../screens/BarbersScreen';
 import BusScheduleScreen from '../screens/BusScheduleScreen';
 import HairdresserScreen from '../screens/HairdresserScreen';
-import { Colors } from '../constants/Colors';
+import LifeScreen from '../screens/LifeScreen';
+import PharmaciesScreen from '../screens/PharmaciesScreen';
 
 export type LifeStackParamList = {
   Geri: undefined;
@@ -39,8 +39,7 @@ export default function LifeStackNavigator() {
         name="Pharmacies"
         component={PharmaciesScreen}
         options={{
-          title: 'Eczaneler',
-          headerTitleAlign: 'left',
+          headerShown: false,
         }}
       />
       <Stack.Screen

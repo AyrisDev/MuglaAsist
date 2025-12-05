@@ -1,9 +1,9 @@
-import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { Colors } from '../constants/Colors';
 import FoodHomeScreen from '../screens/FoodHomeScreen';
 import FoodListScreen from '../screens/FoodListScreen';
 import VenueDetailScreen from '../screens/VenueDetailScreen';
-import { Colors } from '../constants/Colors';
 
 export type FoodStackParamList = {
   Geri: undefined;
@@ -44,16 +44,7 @@ export default function FoodStackNavigator() {
         name="VenueDetail"
         component={VenueDetailScreen}
         options={{
-          headerShown: true,
-          headerStyle: {
-            backgroundColor: Colors.surface,
-          },
-          headerTintColor: Colors.text,
-          headerTitleStyle: {
-            fontWeight: 'bold',
-          },
-          headerShadowVisible: false,
-          title: '',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

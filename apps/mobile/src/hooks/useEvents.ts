@@ -15,13 +15,12 @@ export function useEvents(options: UseEventsOptions = {}) {
       let query = supabase
         .from('events')
         .select('*')
-        .eq('is_active', true)
-        .order('event_date', { ascending: true });
+        .order('date', { ascending: true });
 
       // Only get upcoming events (future dates)
       if (upcoming) {
         const now = new Date().toISOString();
-        query = query.gte('event_date', now);
+        query = query.gte('date', now);
       }
 
       const { data, error } = await query;

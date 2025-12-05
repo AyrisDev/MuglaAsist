@@ -1,0 +1,158 @@
+{
+    "common": {
+        "back": "Geri",
+        "share": "Paylaş",
+        "call": "Ara",
+        "addToCalendar": "Takvime Ekle",
+        "openInMap": "Haritada Aç",
+        "location": "Konum",
+        "about": "Hakkında",
+        "loading": "Yükleniyor...",
+        "error": "Hata",
+        "noData": "Veri bulunamadı",
+        "search": "Ara",
+        "filter": "Filtrele",
+        "save": "Kaydet",
+        "cancel": "İptal",
+        "ok": "Tamam",
+        "yes": "Evet",
+        "no": "Hayır",
+        "close": "Kapat",
+        "open": "Açık",
+        "closed": "Kapalı"
+    },
+    "navigation": {
+        "dashboard": "Ana Sayfa",
+        "events": "Etkinlikler",
+        "deals": "Fırsatlar",
+        "life": "Yaşam",
+        "profile": "Profil",
+        "map": "Harita",
+        "transport": "Ulaşım",
+        "food": "Yemek",
+        "barbers": "Berberler",
+        "hairdresser": "Kuaförler",
+        "pharmacies": "Eczaneler",
+        "busSchedule": "Otobüs Saatleri"
+    },
+    "events": {
+        "title": "Etkinlikler",
+        "eventDetail": "Etkinlik Detayı",
+        "notFound": "Etkinlik bulunamadı",
+        "noDescription": "Bu etkinlik için açıklama bulunmamaktadır.",
+        "noVenue": "Mekan bilgisi yok",
+        "noLocation": "Konum belirtilmemiş",
+        "noPhone": "Bu mekan için telefon numarası bulunmamaktadır.",
+        "aboutEvent": "Etkinlik Hakkında",
+        "mapView": "Harita Görünümü",
+        "months": {
+            "jan": "Oca",
+            "feb": "Şub",
+            "mar": "Mar",
+            "apr": "Nis",
+            "may": "May",
+            "jun": "Haz",
+            "jul": "Tem",
+            "aug": "Ağu",
+            "sep": "Eyl",
+            "oct": "Eki",
+            "nov": "Kas",
+            "dec": "Ara"
+        }
+    },
+    "deals": {
+        "title": "Fırsatlar",
+        "dealDetail": "Fırsat Detayı",
+        "notFound": "Fırsat bulunamadı",
+        "noDescription": "Bu fırsat için açıklama bulunmamaktadır.",
+        "noVenue": "Mekan bilgisi yok",
+        "noLocation": "Konum belirtilmemiş",
+        "noPhone": "Bu mekan için telefon numarası bulunmamaktadır.",
+        "aboutDeal": "Fırsat Hakkında",
+        "validUntil": "Geçerlilik Tarihi",
+        "discount": "İndirim",
+        "mapView": "Harita Görünümü"
+    },
+    "venues": {
+        "title": "Mekanlar",
+        "venueDetail": "Mekan Detayı",
+        "notFound": "Mekan bulunamadı",
+        "noDescription": "Bu mekan için açıklama bulunmamaktadır.",
+        "noPhone": "Telefon numarası bulunmamaktadır.",
+        "noLocation": "Konum belirtilmemiş",
+        "aboutVenue": "Mekan Hakkında",
+        "menu": "Menü",
+        "hours": "Çalışma Saatleri",
+        "contact": "İletişim",
+        "mapView": "Harita Görünümü"
+    },
+    "dashboard": {
+        "welcome": "Hoş Geldiniz",
+        "explore": "Keşfet",
+        "categories": "Kategoriler",
+        "popularEvents": "Popüler Etkinlikler",
+        "popularDeals": "Popüler Fırsatlar",
+        "nearbyVenues": "Yakındaki Mekanlar"
+    },
+    "life": {
+        "title": "Yaşam",
+        "transport": "Ulaşım",
+        "food": "Yemek",
+        "barbers": "Berberler",
+        "hairdresser": "Kuaförler",
+        "pharmacies": "Eczaneler"
+    },
+    "transport": {
+        "title": "Ulaşım",
+        "busSchedule": "Otobüs Saatleri",
+        "routes": "Güzergahlar",
+        "stops": "Duraklar"
+    },
+    "food": {
+        "title": "Yemek",
+        "restaurants": "Restoranlar",
+        "cafes": "Kafeler",
+        "fastFood": "Fast Food",
+        "categories": "Kategoriler"
+    },
+    "pharmacies": {
+        "title": "Eczaneler",
+        "onDuty": "Nöbetçi Eczaneler",
+        "nearby": "Yakındaki Eczaneler",
+        "search": "Eczane Ara"
+    },
+    "profile": {
+        "title": "Profil",
+        "settings": "Ayarlar",
+        "language": "Dil",
+        "notifications": "Bildirimler",
+        "about": "Hakkında",
+        "logout": "Çıkış Yap",
+        "selectLanguage": "Dil Seçin",
+        "turkish": "Türkçe",
+        "english": "İngilizce"
+    },
+    "onboarding": {
+        "skip": "Geç",
+        "next": "İleri",
+        "getStarted": "Başla",
+        "slide1": {
+            "title": "Muğla'yı Keşfedin",
+            "description": "Şehirdeki tüm etkinlikleri, fırsatları ve mekanları keşfedin"
+        },
+        "slide2": {
+            "title": "Fırsatları Kaçırmayın",
+            "description": "En iyi fırsatları ve indirimleri takip edin"
+        },
+        "slide3": {
+            "title": "Kolayca Ulaşın",
+            "description": "Otobüs saatleri, eczaneler ve daha fazlasına kolayca erişin"
+        }
+    },
+    "alerts": {
+        "info": "Bilgi",
+        "warning": "Uyarı",
+        "error": "Hata",
+        "success": "Başarılı"
+    }
+}

@@ -6,9 +6,9 @@ export const Colors = {
   primaryLight: '#FFB574',
 
   // Background
-  background: '#1a1a1a',
-  surface: '#2d2d2d',
-  surfaceLight: '#3a3a3a',
+  background: '#251B15', // Dark brown
+  surface: '#33261F', // Lighter brown for cards
+  surfaceLight: '#3E3028', // Even lighter for borders/chips
 
   // Text
   text: '#ffffff',
@@ -22,12 +22,12 @@ export const Colors = {
   error: '#DC2626',
 
   // Border
-  border: '#404040',
+  border: '#3E3028',
   borderLight: '#4a4a4a',
 
   // Status
   open: '#10B981',
-  closed: '#DC2626',
+  closed: '#a0a0a0', // Grey for closed as per design
 
   // Overlay
   overlay: 'rgba(0, 0, 0, 0.5)',

@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../constants/Colors';
 
 export default function HairdresserScreen() {
@@ -9,7 +9,7 @@ export default function HairdresserScreen() {
     <SafeAreaView style={styles.container} edges={['top']}>
       <View style={styles.content}>
         <View style={styles.iconContainer}>
-          <Ionicons name="scissors" size={64} color={Colors.primary} />
+          <Ionicons name="cut" size={64} color={Colors.primary} />
         </View>
         <Text style={styles.title}>Kuaför</Text>
         <Text style={styles.subtitle}>

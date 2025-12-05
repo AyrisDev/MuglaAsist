@@ -1,18 +1,18 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
   ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
   TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
-import { useBusRoutes, useBusRouteSchedules, useDeparturePoints } from '../hooks/useBusRoutes';
-// import { DayOfWeek } from '../types/database'; // Bu artık gerekmeyebilir, 'string' kullanabiliriz
 import { Colors } from '../constants/Colors';
+import { useBusRoutes, useBusRouteSchedules, useDeparturePoints } from '../hooks/useBusRoutes';
+import { DayOfWeek } from '../types/database';
 
 // --- GÜN TANIMLARI DEĞİŞTİ ---
 // 7 günlük listeyi kaldır
@@ -23,6 +23,17 @@ import { Colors } from '../constants/Colors';
 type ScheduleDay = 'Hafta İçi' | 'Cumartesi' | 'Pazar';
 
 const DAY_ORDER: ScheduleDay[] = ['Hafta İçi', 'Cumartesi', 'Pazar'];
+
+const mapCategoryToDays = (category: ScheduleDay): DayOfWeek[] => {
+  switch (category) {
+    case 'Hafta İçi':
+      return ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+    case 'Cumartesi':
+      return ['saturday'];
+    case 'Pazar':
+      return ['sunday'];
+  }
+};
 
 // --- getDatabaseDayKey FONKSİYONU KALDIRILDI ---
 // Artık 'selectedDay' state'i doğrudan DB anahtarını tutacak
@@ -104,7 +115,7 @@ export default function BusScheduleScreen() {
 
   // Seçili gün ve kalkış noktasına göre schedule bul
   const currentSchedule = schedules?.find(
-    (s) => s.day_of_week === selectedDay
+    (s) => mapCategoryToDays(selectedDay).includes(s.day_of_week)
   );
 
   const departureTimes = currentSchedule?.departure_times || [];
@@ -158,7 +169,7 @@ export default function BusScheduleScreen() {
                 ]}
                 numberOfLines={1} // Hat isimlerinin taşmamasını sağlar
               >
-                {route.name} 
+                {route.name}
                 {/* Sadece hat numarasını (örn: 1-48) gösterir */}
               </Text>
             </TouchableOpacity>
@@ -263,10 +274,10 @@ export default function BusScheduleScreen() {
           <Text style={styles.emptyText}>
             {selectedDeparturePoint && (
               <>
-                <Text style={{fontWeight: 'bold'}}>{selectedDeparturePoint}</Text> kalkış noktası için{'\n'}
+                <Text style={{ fontWeight: 'bold' }}>{selectedDeparturePoint}</Text> kalkış noktası için{'\n'}
               </>
             )}
-            <Text style={{fontWeight: 'bold'}}>{selectedDay}</Text> günü sefer bulunmuyor
+            <Text style={{ fontWeight: 'bold' }}>{selectedDay}</Text> günü sefer bulunmuyor
           </Text>
         </View>
       )}
